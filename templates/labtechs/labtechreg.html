@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+          <h3 class="mb-0"><i class="bi bi-clipboard2-pulse me-2"></i>Lab Technician Registration</h3>
+          <p class="mb-0 mt-1 opacity-75 small">Create your staff account</p>
+        </div>
+        <div class="card-body p-4">
+          <form action="{% url 'labtechreg' %}" method="POST">
+            {% csrf_token %}
+            <h6 class="text-muted text-uppercase fw-bold mb-3 border-bottom pb-2">Account Details</h6>
+            <div class="row">
+              <div class="col-md-6">{{ form.username | as_crispy_field }}</div>
+              <div class="col-md-6">{{ form.email | as_crispy_field }}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">{{ form.password1 | as_crispy_field }}</div>
+              <div class="col-md-6">{{ form.password2 | as_crispy_field }}</div>
+            </div>
+
+            <h6 class="text-muted text-uppercase fw-bold mb-3 border-bottom pb-2 mt-3">Professional Information</h6>
+            <div class="row">
+              <div class="col-md-6">{{ form.emp_id | as_crispy_field }}</div>
+              <div class="col-md-6">{{ form.qualification | as_crispy_field }}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">{{ form.year_of_exp | as_crispy_field }}</div>
+              <div class="col-md-6">{{ form.address | as_crispy_field }}</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold mt-2">
+              <i class="bi bi-person-check me-1"></i>Register as Lab Technician
+            </button>
+          </form>
+          <p class="text-center mt-3 mb-0 small text-muted">
+            Already have an account? <a href="{% url 'login' %}">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

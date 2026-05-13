@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-9">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+          <h3 class="mb-0"><i class="bi bi-file-earmark-medical me-2"></i>Discharge Summary</h3>
+          <p class="mb-0 mt-1 opacity-75 small">Fill in patient discharge details</p>
+        </div>
+        <div class="card-body p-4">
+          <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <div class="d-flex gap-2 mt-3">
+              <button type="submit" class="btn btn-primary flex-grow-1 py-2 fw-bold">
+                <i class="bi bi-save me-1"></i>Save Discharge
+              </button>
+              <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary py-2">
+                <i class="bi bi-x-lg me-1"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const patientField = document.getElementById("id_patient_name");
+    if (!patientField) return;
+
+    patientField.addEventListener("change", function () {
+        const patientId = this.value;
+        if (!patientId) return;
+
+        fetch(`/payment/get-patient-details/?patient_id=${patientId}`)
+            .then(response => response.json())
+            .then(data => {
+                const doctorField = document.getElementById("id_doctor_name");
+                const treatmentField = document.getElementById("id_treatment_name");
+                const admitField = document.getElementById("id_date_of_admit");
+
+                if (doctorField) doctorField.value = String(data.doctor_id || '');
+                if (treatmentField) treatmentField.value = String(data.treatment_id || '');
+                if (admitField) admitField.value = data.date_of_admit || '';
+
+                if (doctorField) doctorField.dispatchEvent(new Event('change'));
+                if (treatmentField) treatmentField.dispatchEvent(new Event('change'));
+            })
+            .catch(err => console.error("Error fetching patient details:", err));
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  .hero-section {
+    position: relative;
+    height: 88vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(13,110,253,0.72) 0%, rgba(0,0,0,0.45) 100%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 0 2rem;
+  }
+  .hero-content h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    margin-bottom: 0.5rem;
+  }
+  .hero-content p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.8rem;
+  }
+  .hero-content .btn {
+    margin: 0 6px 10px 0;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+  }
+  .labtech-card {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(6px);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+  }
+  .labtech-card h3, .labtech-card h4 {
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+</style>
+
+<div class="hero-section">
+  <img src="{% static 'images/hospital.avif' %}" alt="MediCare Hospital" class="hero-img">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <h1><i class="bi bi-hospital me-2"></i>MediCare Hospital</h1>
+    <p>Quality healthcare, compassionate care — all in one place.</p>
+
+    {% if role == 'labtech' %}
+      <div class="labtech-card">
+        <h3><i class="bi bi-person-badge me-2"></i>{{ labtech.user.username }}</h3>
+        <h4><i class="bi bi-card-list me-1"></i>Employee ID: {{ labtech.emp_id }}</h4>
+      </div><br>
+      <a href="{% url 'alltests' %}" class="btn btn-light"><i class="bi bi-clipboard2-pulse me-1"></i>All Tests</a>
+      <a href="{% url 'dashboard' %}" class="btn btn-outline-light"><i class="bi bi-grid me-1"></i>Dashboard</a>
+      <a href="{% url 'add-discharge' %}" class="btn btn-warning"><i class="bi bi-file-earmark-medical me-1"></i>Discharge</a>
+
+    {% elif role == 'user' %}
+      <a href="{% url 'alldoctors' %}" class="btn btn-light"><i class="bi bi-person-lines-fill me-1"></i>Find Doctors</a>
+      <a href="{% url 'treatment' %}" class="btn btn-outline-light"><i class="bi bi-heart-pulse me-1"></i>Treatments</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
